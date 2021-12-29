@@ -16,7 +16,7 @@ namespace SpaceStation13
     {
         public override string Icon => SpaceStation13Checks.Icon;
 
-        public override bool IsInstalled => SpaceStation13Checks.IsInstalled;
+        public override bool IsInstalled => false;
 
         public override void Open()
         {
@@ -64,13 +64,10 @@ namespace SpaceStation13
             {
                 RegistryKey key;
                 key = Registry.ClassesRoot.OpenSubKey(@"byond\shell\open\command");
-                if (key?.GetValueNames().Contains("byond.exe") == true)
                 {
-                    // Keeping old slashes replacer out of habit. Will be cleaned up eventually.
-                    return key.GetValue("").ToString().Replace("\\\\", "\\");
+                    // We need a path to executable, not a blind URI copy-paste.
+                    return key.GetValue("").ToString().Replace(" \"%1\"", "");
                 }          
-
-                return string.Empty;
             }
         }
 

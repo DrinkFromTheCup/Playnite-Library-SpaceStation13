@@ -17,12 +17,11 @@ namespace SpaceStation13
     {
         // For Step 1, it is enough to keep this mess as is.
         // I'll probably expand on it later.
-        string GamenameInstallDirectory = Path.Combine(SpaceStation13Checks.InstallationPath, "").Replace("\\\\", "\\");
-        bool GamenameInstalled
+        bool SpaceStation13Installed
         {
             get
             {
-                if (string.IsNullOrEmpty(GamenameInstallDirectory) || !Directory.Exists(GamenameInstallDirectory))
+                if (string.IsNullOrEmpty(SpaceStation13Checks.InstallationPath) || !File.Exists(SpaceStation13Checks.InstallationPath))
                 {
                     return false;
                 }
@@ -36,9 +35,9 @@ namespace SpaceStation13
 
         // Start of SpaceStation13 plugin definitions
         public SpaceStation13(IPlayniteAPI api) : base(
-            "Space Station 13 (BYOND) Integration",
+            "Space Station 13 (BYOND)",
             Guid.Parse("3bf61d13-9730-442a-b9c0-f7228c8cd529"),
-            // PDX closes its own launcher v2 just fine, no need in auto-close.
+            // No need in auto-close.
             // No need in extra settings either.
             new LibraryPluginProperties { CanShutdownClient = false, HasSettings = false },
             new SpaceStation13ChecksClient(),
@@ -61,8 +60,10 @@ namespace SpaceStation13
                 {
                     Name = "Space Station 13",
                     // Keeping it generic since I didn't finished the research on BYOND's internal IDs yet.
+                    // There are at least two different kinds (one of which is needed for connecting to servers -
+                    // but we'd better import whole playlist with whole links instead of assembling it on the go.
+                    // Eventually.
                     GameId = "spacestation13",
-                    InstallDirectory = GamenameInstallDirectory,
                     GameActions = new List<GameAction>
                     {
                         new GameAction()
@@ -73,7 +74,7 @@ namespace SpaceStation13
                             IsPlayAction = true
                         }
                     },
-                    IsInstalled = GamenameInstalled,
+                    IsInstalled = SpaceStation13Installed,
                     Source = new MetadataNameProperty("Space Station 13"),
                     Links = new List<Link>()
                     {
