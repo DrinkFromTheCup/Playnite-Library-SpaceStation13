@@ -1,5 +1,3 @@
-## NOT READY FOR GENERAL AUDIENCE
-
 ### Space Station 13 (and its BYOND launcher) library integration for Playnite
 
 As of v0.0 (current release), the extension can:
