@@ -5,3 +5,6 @@ Version: 0.1
 Module: SpaceStation13.dll
 Type: GameLibrary
 Icon: icon.png
+Links:
+  - Name: Github
+    Url: https://github.com/DrinkFromTheCup/Playnite-Library-SpaceStation13
