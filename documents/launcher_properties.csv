@@ -1,0 +1,17 @@
+Game,Space Station 13,
+Launcher is mandatory,true,
+1 game = 1 launcher,false,Do note that for SS13 other games are mostly irrelevant...
+registry path to launcher,Компьютер\HKEY_CLASSES_ROOT\byond\shell\open\command,
+registry path to launcher key,default,
+registry path to launcher type,full path to executable,
+executable name,byond.exe,
+game vs launcher folder relation,irrelevant,
+path to game folder type,irrelevant,
+path to game folder source,irrelevant,
+path to game folder source key,irrelevant,
+path to game folder source type,irrelevant,
+URL to launcher installer,http://www.byond.com/download/,
+Play action type,byond://,URI
+Uninstall game action type,open Windows Uninstall Programs,
+Store page URL,http://www.byond.com/games/exadv1/spacestation13,
+Launcher name,BYOND,
