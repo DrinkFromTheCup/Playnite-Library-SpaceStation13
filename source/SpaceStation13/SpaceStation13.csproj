@@ -31,7 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Playnite.SDK, Version=6.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Playnite.SDK, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>C:\Users\frost\AppData\Local\Playnite\Playnite.SDK.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
