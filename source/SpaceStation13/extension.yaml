@@ -1,10 +1,12 @@
 ﻿Id: SpaceStation13
-Name: SpaceStation13 Importer
+Name: Space Station 13 (BYOND) Importer
 Author: Aliaksandr Dzik
 Version: 0.1
 Module: SpaceStation13.dll
 Type: GameLibrary
 Icon: icon.png
 Links:
+  - Name: Forum
+    Url: https://playnite.link/forum/thread-1045.html
   - Name: Github
     Url: https://github.com/DrinkFromTheCup/Playnite-Library-SpaceStation13
