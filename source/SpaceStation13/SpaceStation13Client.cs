@@ -18,6 +18,8 @@ namespace SpaceStation13
 
         public override bool IsInstalled => false;
 
+        // Keeping it there despite intentional lack of BYOND in launchers launch menu,
+        // just in case of interesting interactions with other plugins.
         public override void Open()
         {
             ProcessStarter.StartProcess(SpaceStation13Checks.ClientExecPath, string.Empty);
@@ -29,6 +31,7 @@ namespace SpaceStation13
 
         // Do note that since we got everything necessary in InstallationPath few blocks below,
         // we don't need to append anything anywhere. Unless it bugs. Which it won't.
+        // It also enforces filecheck usage instead of foldercheck everywhere later.
         public static string ClientExecPath
         {
             get
@@ -55,9 +58,9 @@ namespace SpaceStation13
 
         // The plugin's Sequence begins here.
         // Our #1 goal is to get the path to launcher.
-        // For this particular game, however, we're blessed with direct link to the launcher's executable.
+        // For this particular game, however, we're blessed with STATIC direct link to the launcher's executable.
         // Even better, since we don't need to launch anything else ever (for now) - it all begins here
-        // and here it all ends. The rest of the code just works by example.
+        // and here it all ends. The rest of the code just works by example to preserve any possible third-party interactions.
         public static string InstallationPath
         {
             get
@@ -66,6 +69,10 @@ namespace SpaceStation13
                 key = Registry.ClassesRoot.OpenSubKey(@"byond\shell\open\command");
                 {
                     // We need a path to executable, not a blind URI copy-paste.
+                    // Do note that portable client exists - for which this check will return null by default.
+                    // Since this install method breaks connection from web interfaces, it will cause trouble to end user anyway
+                    // way before our plugin might suffer from that.
+                    // I believe, BYOND adds relevant registry entry anyway after first run so...
                     return key.GetValue("").ToString().Replace(" \"%1\"", "");
                 }          
             }

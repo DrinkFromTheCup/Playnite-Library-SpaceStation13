@@ -31,30 +31,25 @@ namespace SpaceStation13
                 }
             }
         }
-        // End of offloaded info about possible games.
 
         // Start of SpaceStation13 plugin definitions
         public SpaceStation13(IPlayniteAPI api) : base(
             "Space Station 13 (BYOND)",
             Guid.Parse("3bf61d13-9730-442a-b9c0-f7228c8cd529"),
-            // No need in auto-close.
-            // No need in extra settings either.
+            // No need in auto-close. No need in extra settings either.
             new LibraryPluginProperties { CanShutdownClient = false, HasSettings = false },
             new SpaceStation13ChecksClient(),
             SpaceStation13Checks.Icon,
             (_) => new SpaceStation13SettingsView(),
             api)
         {
-            // No settings - no problem. Looks optional.
-            //SettingsViewModel = new ParadoxlibrarySettingsViewModel(this, api);
+            // No settings - no problem. Looks optional. I believe, API needs this empty entry anyway so keeping it as is.
         }
 
         public override IEnumerable<GameMetadata> GetGames(LibraryGetGamesArgs args)
         {
             return new List<GameMetadata>()
             {
-                // Sober people do cycles - but I'm too unskilled currently.
-
                 // Start of new game entry.
                 new GameMetadata()
                 {
@@ -75,7 +70,8 @@ namespace SpaceStation13
                         }
                     },
                     IsInstalled = SpaceStation13Installed,
-                    Source = new MetadataNameProperty("Space Station 13"),
+                    // Intentionally keeping both names together. Since de jure it's a game entry but de facto launcher entry.
+                    Source = new MetadataNameProperty("Space Station 13 (BYOND)"),
                     Links = new List<Link>()
                     {
                         new Link("Store", @"http://www.byond.com/games/exadv1/spacestation13")
@@ -110,12 +106,6 @@ namespace SpaceStation13
             yield return new SpaceStation13UninstallController(args.Game);
         }
         // End of blatant install/uninstall links adding.
-
-        // No settings - no problem. Looks optional.
-        //public override ISettings GetSettings(bool firstRunSettings)
-        //{
-        //    return settings;
-        //}
 
         public override UserControl GetSettingsView(bool firstRunSettings)
         {

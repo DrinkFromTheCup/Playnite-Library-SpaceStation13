@@ -13,13 +13,16 @@ using Playnite.SDK;
 using Playnite.SDK.Models;
 using Playnite.SDK.Plugins;
 
-
+// As seen in https://github.com/JosefNemec/PlayniteExtensions/blob/master/source/Libraries/GogLibrary/GogGameController.cs and the like.
+// Despite my bias against keeping redundant processes in memory, borrowing well-written install/uninstall watcher
+// seems to be more end-user-friendly than my original intent to just mark everything at will.
+// Simplified (almost gutted), since we're handling 1 (one) already-known title only.
 
 namespace SpaceStation13
 {
     public class SpaceStation13InstallController : InstallController
     {
-        //private CancellationTokenSource watcherToken;
+        private CancellationTokenSource watcherToken;
 
         public SpaceStation13InstallController(Game game) : base(game)
         {
@@ -36,7 +39,7 @@ namespace SpaceStation13
 
         public override void Dispose()
         {
-            //watcherToken?.Cancel();
+            watcherToken?.Cancel();
         }
 
         public override void Install(InstallActionArgs args)
@@ -53,44 +56,35 @@ namespace SpaceStation13
                 ProcessStarter.StartUrl(@"http://www.byond.com/download/");
             }
 
-            //StartInstallWatcher();
+            StartInstallWatcher();
         }
 
-        //public async void StartInstallWatcher()
-        //{
-            //watcherToken = new CancellationTokenSource();
-            //await Task.Run(async () =>
-            //{
-            //    while (true)
-            //    {
-            //        if (watcherToken.IsCancellationRequested)
-            //        {
-            //            return;
-            //        }
+        public async void StartInstallWatcher()
+        {
+            watcherToken = new CancellationTokenSource();
+            await Task.Run(async () =>
+            {
+                while (true)
+                {
+                    if (watcherToken.IsCancellationRequested)
+                    {
+                        return;
+                    }
+                    if (File.Exists(SpaceStation13Checks.InstallationPath))
+                    {
+                        InvokeOnInstalled(new GameInstalledEventArgs());
+                        return;
+                    }
 
-                    // Skipping temporarily to avoid going insane.
-                    //var games = Paradox.GetInstalledGames();
-                    //if (games.ContainsKey(Game.GameId))
-                    //{
-                    //    var game = games[Game.GameId];
-                    //   var installInfo = new GameInstallationData()
-                    //    {
-                    //        InstallDirectory = game.InstallDirectory
-                    //    };
-
-                    //    InvokeOnInstalled(new GameInstalledEventArgs(installInfo));
-                    //    return;
-            //        }
-
-            //        await Task.Delay(10000);
-            //    }
-            //});
-        //}
+                    await Task.Delay(10000);
+                }
+            });
+        }
     }
 
     public class SpaceStation13UninstallController : UninstallController
     {
-        //private CancellationTokenSource watcherToken;
+        private CancellationTokenSource watcherToken;
 
         public SpaceStation13UninstallController(Game game) : base(game)
         {
@@ -99,7 +93,7 @@ namespace SpaceStation13
 
         public override void Dispose()
         {
-            //watcherToken?.Cancel();
+            watcherToken?.Cancel();
         }
 
         public override void Uninstall(UninstallActionArgs args)
@@ -108,34 +102,31 @@ namespace SpaceStation13
             if (!File.Exists(SpaceStation13Checks.ClientExecPath))
             // Launcher was removed but game persisted somehow.
             {
-                throw new FileNotFoundException("Uninstaller not found.");
+                throw new FileNotFoundException("BYOND has been uninstalled earlier.");
             }
-            // NB: for some reason, Process.Start results in successful launcher launch - but all games
-            // are listed as uninstalled. Resorting to ProcessStarter since we prefer it anyway...
-            ProcessStarter.StartProcess(SpaceStation13Checks.ClientExecPath);
-            //StartUninstallWatcher();
+            // Running generic Windows' uninstaller with one simple trick. . .
+            ProcessStarter.StartProcess("appwiz.cpl");
+            StartUninstallWatcher();
         }
 
-        //public async void StartUninstallWatcher()
-        //{
-            //watcherToken = new CancellationTokenSource();
-            //while (true)
-            //{
-            //    if (watcherToken.IsCancellationRequested)
-            //    {
-            //        return;
-            //    }
+        public async void StartUninstallWatcher()
+        {
+            watcherToken = new CancellationTokenSource();
+            while (true)
+            {
+                if (watcherToken.IsCancellationRequested)
+                {
+                    return;
+                }
 
-                // Skipping temporarily to avoid going insane.
-                //var games = Paradox.GetInstalledGames();
-                //if (!games.ContainsKey(Game.GameId))
-                //{
-            //        InvokeOnUninstalled(new GameUninstalledEventArgs());
-            //        return;
-                //}
+                if (!File.Exists(SpaceStation13Checks.InstallationPath))
+                {
+                    InvokeOnUninstalled(new GameUninstalledEventArgs());
+                    return;
+                }
 
-                //await Task.Delay(5000);
-            //}
-        //}
+                await Task.Delay(5000);
+            }
+        }
     }
 }
