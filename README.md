@@ -1,3 +1,7 @@
+### Open for adoption!
+
+Due to https://github.blog/2022-05-04-software-security-starts-with-the-developer-securing-developer-accounts-with-2fa/ , I can't continue my advancements at GitHub. Feel free to take over this repo, if you like.
+
 ### Space Station 13 (and its BYOND launcher) library integration for Playnite
 
 As of v0.2 (current release), the extension can:
